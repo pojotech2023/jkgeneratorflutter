@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../base_url.dart';
 
 class ServiceReportScreen extends StatefulWidget {
   @override
@@ -140,12 +141,12 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
       final engineerId = prefs.getInt('engineer_id');
 
       String url = "";
-      if (selectedVisit == 'Visit 1') url = "https://jkgenerator.com/api/visitone/all";
-      else if (selectedVisit == 'Visit 2') url = "https://jkgenerator.com/api/visittwo/all";
-      else if (selectedVisit == 'Visit 3') url = "https://jkgenerator.com/api/visitthree/all";
-      else if (selectedVisit == 'Visit 4') url = "https://jkgenerator.com/api/visitfour/all";
-      else if (selectedVisit == 'Mobilization') url = "https://jkgenerator.com/public/api/mobilization/pdf_form";
-      else if (selectedVisit == 'Demobilization') url = "https://jkgenerator.com/public/api/Demobilization/pdf_form";
+      if (selectedVisit == 'Visit 1') url = "$baseApiUrl/visitone/all";
+      else if (selectedVisit == 'Visit 2') url = "$baseApiUrl/visittwo/all";
+      else if (selectedVisit == 'Visit 3') url = "$baseApiUrl/visitthree/all";
+      else if (selectedVisit == 'Visit 4') url = "$baseApiUrl/visitfour/all";
+      else if (selectedVisit == 'Mobilization') url = "$basePublicApiUrl/mobilization/pdf_form";
+      else if (selectedVisit == 'Demobilization') url = "$basePublicApiUrl/Demobilization/pdf_form";
 
       var request = http.MultipartRequest('POST', Uri.parse(url));
 
@@ -164,13 +165,15 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
       request.fields['asset_number'] = assetNumber;
       request.fields['engineer_id'] = engineerId?.toString() ?? "";
       
-      // Additional identifiers to help backend find the record
-      if (generator != null) {
-        if (generator['id'] != null) {
-          request.fields['id'] = generator['id'].toString();
-        }
-        if (generator['generator_id'] != null) {
-          request.fields['generator_id'] = generator['generator_id'].toString();
+      // Additional identifiers to help backend find the record (only for Visit 1-4)
+      if (selectedVisit != 'Mobilization' && selectedVisit != 'Demobilization') {
+        if (generator != null) {
+          if (generator['id'] != null) {
+            request.fields['id'] = generator['id'].toString();
+          }
+          if (generator['generator_id'] != null) {
+            request.fields['generator_id'] = generator['generator_id'].toString();
+          }
         }
       }
       
@@ -221,7 +224,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
         request.fields['water_pumb&hoses'] = dropdownValues['Water Pump and Hoses'] ?? "Good";
         request.fields['dg_maintenece'] = dropdownValues['DG Maintenance Site'] ?? "Good";
 
-        if (generator?['id'] != null) request.fields['id'] = generator!['id'].toString();
         if (engineerId != null) request.fields['engineer_id'] = engineerId.toString();
         
       } else {

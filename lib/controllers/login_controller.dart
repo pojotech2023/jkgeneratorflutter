@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/snackbar_utils.dart';
+import '../base_url.dart';
 
 class LoginController {
   TextEditingController emailController = TextEditingController();
@@ -19,7 +20,7 @@ class LoginController {
 
     try {
       final response = await http.post(
-        Uri.parse("https://jkgenerator.com/api/login"),
+        Uri.parse("$baseApiUrl/login"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "email": email,

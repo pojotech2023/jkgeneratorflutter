@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import '../utils/snackbar_utils.dart';
+import '../base_url.dart';
 
 class PDFViewScreen extends StatefulWidget {
   @override
@@ -42,10 +43,10 @@ class _PDFViewScreenState extends State<PDFViewScreen> {
       bool isGet = false;
 
       if (userRole == "mobilization") {
-        url = "https://jkgenerator.com/public/api/mobilization/pdf?asset_number=${generator['asset_number']}";
+        url = "$basePublicApiUrl/mobilization/pdf?asset_number=${generator['asset_number']}";
         isGet = true;
       } else if (userRole == "demobilization" || userRole == "DeMobilization") {
-        url = "https://jkgenerator.com/public/api/Demobilization/pdf?asset_number=${generator['asset_number']}";
+        url = "$basePublicApiUrl/Demobilization/pdf?asset_number=${generator['asset_number']}";
         isGet = true;
       } else {
         String endpoint = "";
@@ -53,7 +54,7 @@ class _PDFViewScreenState extends State<PDFViewScreen> {
         else if (visitIndex == 2) endpoint = "visittwo/download";
         else if (visitIndex == 3) endpoint = "visitthree/download";
         else if (visitIndex == 4) endpoint = "visitfour/download";
-        url = "https://jkgenerator.com/api/$endpoint";
+        url = "$baseApiUrl/$endpoint";
       }
 
       http.Response response;

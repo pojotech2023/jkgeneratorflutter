@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../base_url.dart';
 
 class DashboardController {
   List<dynamic> generators = [];
@@ -37,10 +38,10 @@ class DashboardController {
 
       http.Response response;
       if (isGet) {
-        response = await http.get(Uri.parse("https://jkgenerator.com/api/$endpoint"));
+        response = await http.get(Uri.parse("$baseApiUrl/$endpoint"));
       } else {
         response = await http.post(
-          Uri.parse("https://jkgenerator.com/api/$endpoint"),
+          Uri.parse("$baseApiUrl/$endpoint"),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode({"engineer_id": engineerId.toString()}),
         );
